@@ -21,8 +21,8 @@ import sys
 
 sys.path.insert(0, 'E:\Yandex_Lyceum(2 year)\\')
 print(sys.path)
-from Flask_project.data.db_session import SqlAlchemyBase
-import Flask_project.data.__all_models
+from data.db_session import SqlAlchemyBase
+import data.__all_models
 
 target_metadata = SqlAlchemyBase.metadata
 
