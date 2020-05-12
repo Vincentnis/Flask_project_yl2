@@ -6,15 +6,15 @@ from rest_api.parsers import *
 from tests import abort_if_user_not_found, abort_if_user_email_equal_to_new_user_email
 
 
-class UsersResource(Resource): # ресурс для одной работы
-    def get(self, user_id):  # получение информации об одной работе
+class UsersResource(Resource): # ресурс для одного пользователя
+    def get(self, user_id):  # получение информации об одном пользователе
         abort_if_user_not_found(user_id)
         session = db_session.create_session()
         user = session.query(User).get(user_id)
         return jsonify({'user': user.to_dict(only=('age', 'surname', 'name', 'about',
                                                    "speciality", 'email', 'avatar_url'))})
 
-    def put(self, user_id):  # изменение информации по одной работе функция edit_profile
+    def put(self, user_id):  # изменение информации по одному пользователю функция edit_profile
         args = parser.parse_args()  # парсим аргументы
         session = db_session.create_session()
         abort_if_user_not_found(user_id)
@@ -35,14 +35,14 @@ class UsersResource(Resource): # ресурс для одной работы
         return jsonify({'success': 'OK'})
 
 
-class UsersListResource(Resource):  # ресурс для списка работ
-    def get(self):  # получение всех работ
+class UsersListResource(Resource):  # ресурс списка пользователей
+    def get(self):  # получение всех пользователей
         session = db_session.create_session()
         users = session.query(User).all()
         return {'users': [user.to_dict(only=('age', 'surname', 'name', 'about',
                                              "speciality", 'email', 'avatar_url')) for user in users]}
 
-    def post(self):  # добавление работы
+    def post(self):  # добавление пользователя
         args = parser.parse_args()  # парсим аргументы
         session = db_session.create_session()
         abort_if_user_email_equal_to_new_user_email(args["email"])  # проверка на уникальность почты

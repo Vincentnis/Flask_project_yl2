@@ -29,7 +29,7 @@ class MessagesResource(Resource):
 
         for i in range(len(messages)):  # проходим по сообщениям
             if messages[i][0] == message_id and i == len(messages) - 1:  # если это последнее сообщение
-                if len(messages) == 1:
+                if len(messages) == 1:  # если это единственное сообщение
                     for j in range(len(chats)):
                         if chats[j].split(", ")[1] == str(message_id):
                             chats.pop(j)  # удаляем чат
@@ -71,8 +71,6 @@ class MessagesListResource(Resource):
         args = message_parser.parse_args()
         sender = args['sender']
         receiver = args['receiver']
-        """Сначала мы берём сообщения отправленные нами
-            Потом нам от отправителя --> |(тоесть or) и вот - последовательный чат переписки готов"""
         mes = session.query(Message).filter(and_(Message.sender == sender, Message.receiver == receiver) |
                                             and_(Message.sender == receiver, Message.receiver == sender))
         mes = [(message.id, message.sender, message.receiver, message.text, message.date.strftime("%H:%M:%S %d.%m.%Y"))
